@@ -1,0 +1,14 @@
+# =========================
+#  CODEOWNERS
+#  Solo @sh4y0 y @AllanSagastegui pueden aprobar cambios
+# =========================
+
+# Regla general: todos los archivos requieren aprobación de Allan o sh4y0
+* @sh4y0 @AllanSagastegui
+
+# (Opcional) Puedes especificar microservicios si quieres granularidad
+# /services/service-authentication/   @sh4y0 @AllanSagastegui
+# /services/service-user/             @sh4y0 @AllanSagastegui
+# /services/service-payment/          @sh4y0 @AllanSagastegui
+# /services/service-review/           @sh4y0 @AllanSagastegui
+# /services/service-audit/            @sh4y0 @AllanSagastegui

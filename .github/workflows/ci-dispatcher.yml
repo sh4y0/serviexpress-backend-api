@@ -1,0 +1,54 @@
+# .github/workflows/ci-dispatcher.yml
+name: CI Dispatcher
+
+on:
+  pull_request:
+    paths:
+      - 'services/**'
+
+jobs:
+  discover-changed-services:
+    runs-on: ubuntu-latest
+    outputs:
+      services_matrix: ${{ steps.get-changes.outputs.services_matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.base_ref }} --depth=1
+
+      - name: Get changed service directories
+        id: get-changes
+        run: |
+          CHANGED_DIRS=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -oE '^services/[^/]+' | sort | uniq)
+          
+          echo "Changed directories:"
+          echo "$CHANGED_DIRS"
+
+          MATRIX="{\"include\":["
+          for dir in $CHANGED_DIRS; do
+              service_name=$(basename "$dir")
+              MATRIX+="{\"service_name\":\"$service_name\",\"service_path\":\"./$dir\"},"
+          done
+          if [[ -n "$CHANGED_DIRS" ]]; then
+              MATRIX="${MATRIX%,}"
+          fi
+          MATRIX+="]}"
+
+          echo "Discovered matrix: $MATRIX"
+          echo "services_matrix=$MATRIX" >> $GITHUB_OUTPUT
+
+  run-ci-for-changed-services:
+    needs: discover-changed-services
+    if: ${{ fromJson(needs.discover-changed-services.outputs.services_matrix).include != '' }}
+    strategy:
+      matrix: ${{ fromJson(needs.discover-changed-services.outputs.services_matrix) }}
+      fail-fast: false
+    uses: ./.github/workflows/reusable-ci-pipeline.yml
+    with:
+      service_name: ${{ matrix.service_name }}
+      service_path: ${{ matrix.service_path }}
+    secrets: inherit
