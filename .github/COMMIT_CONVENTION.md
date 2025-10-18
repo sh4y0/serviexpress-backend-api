@@ -314,46 +314,6 @@ Closes #178
 
 ---
 
-## 🛠️ Herramientas Recomendadas
-
-### Validación Local
-
-```bash
-# Pre-commit hook con commitlint
-npm install --save-dev @commitlint/cli @commitlint/config-conventional
-echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
-```
-
-### Git Hooks con Husky
-
-```bash
-# Instalar husky
-npm install --save-dev husky
-npx husky install
-
-# Hook de validación
-npx husky add .husky/commit-msg 'npx --no -- commitlint --edit ${1}'
-```
-
-### Generación de Changelog
-
-```bash
-# Con conventional-changelog
-npm install --save-dev conventional-changelog-cli
-npx conventional-changelog -p angular -i CHANGELOG.md -s
-```
-
----
-
-## 📚 Referencias
-
-- 📖 [Conventional Commits Specification](https://www.conventionalcommits.org/)
-- 🎯 [Semantic Versioning 2.0.0](https://semver.org/)
-- 🔧 [Commitlint](https://commitlint.js.org/)
-- 🚀 [Semantic Release](https://semantic-release.gitbook.io/)
-
----
-
 <div align="center">
 
 **© 2025 Serviexpress Backend Team**

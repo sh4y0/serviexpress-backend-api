@@ -1,0 +1,22 @@
+def includedBuilds = gradle.includedBuilds
+
+tasks.register('buildAll') {
+    description = "Compila todos los microservicios del monorepo"
+    group = "build"
+
+    dependsOn includedBuilds.collect { it.task(':build') }
+}
+
+tasks.register('testAll') {
+    description = "Ejecuta todos los tests de los microservicios"
+    group = "verification"
+
+    dependsOn includedBuilds.collect { it.task(':test') }
+}
+
+tasks.register('cleanAll') {
+    description = "Limpia todos los builds de los microservicios"
+    group = "build"
+
+    dependsOn includedBuilds.collect { it.task(':clean') }
+}

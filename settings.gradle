@@ -1,0 +1,9 @@
+rootProject.name = "serviexpress-monorepo"
+def servicesDir = file("services")
+
+servicesDir.eachDir { dir ->
+    if (new File(dir, "settings.gradle").exists()) {
+        println "Incluyendo microservicio: ${dir.name}"
+        includeBuild(dir)
+    }
+}
